@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/no-static-element-interactions */
 import { PointerEvent, ReactNode, useRef } from 'react';
 
 import pop1Sound from '@/assets/pop1.ogg';
@@ -48,9 +49,7 @@ export function MainLayout({ children }: MainLayoutProps) {
   return (
     <div
       ref={containerRef}
-      role="button"
-      className="flex flex-col justify-between items-center h-screen"
-      tabIndex={-1}
+      className="flex flex-col justify-between items-center h-screen high"
       onPointerDown={onLayoutDown}
       onPointerUp={onLayoutUp}
       onKeyDown={onPop}
