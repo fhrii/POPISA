@@ -32,25 +32,25 @@ export function MainLayout({ children }: MainLayoutProps) {
     }
   };
 
-  const onLayoutMouseDown = (event: MouseEvent) => {
+  const onLayoutDown = (event: MouseEvent) => {
     if (event.target === containerRef.current) onPop();
   };
 
-  const onLayoutMouseUp = (event: MouseEvent) => {
+  const onLayoutUp = (event: MouseEvent) => {
     if (event.target === containerRef.current) onPressUp();
   };
 
   useEffect(() => {
-    document.addEventListener('mousedown', onLayoutMouseDown);
+    document.addEventListener('pointerdown', onLayoutDown);
     document.addEventListener('keydown', onPop);
     document.addEventListener('keyup', onPressUp);
-    document.addEventListener('mouseup', onLayoutMouseUp);
+    document.addEventListener('pointerup', onLayoutUp);
 
     return () => {
-      document.removeEventListener('mousedown', onLayoutMouseDown);
+      document.removeEventListener('mousedown', onLayoutDown);
       document.removeEventListener('keydown', onPop);
       document.removeEventListener('keyup', onPressUp);
-      document.removeEventListener('mouseup', onLayoutMouseUp);
+      document.removeEventListener('mouseup', onLayoutUp);
     };
   }, []);
 
