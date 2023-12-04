@@ -3,6 +3,10 @@
 @tailwind utilities;
 
 @layer base {
+  html {
+    @apply overflow-hidden;
+  }
+
   body {
     @apply relative bg-[#BDAA90] overflow-hidden;
   }
