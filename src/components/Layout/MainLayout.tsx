@@ -1,6 +1,9 @@
-import { ReactNode, useEffect, useRef } from 'react';
+import { PointerEvent, ReactNode, useRef } from 'react';
 
-import popSound from '@/assets/pop.ogg';
+import pop1Sound from '@/assets/pop1.ogg';
+import pop2Sound from '@/assets/pop2.ogg';
+import pop3Sound from '@/assets/pop3.ogg';
+import pop4Sound from '@/assets/pop4.ogg';
 import { useScore } from '@/context';
 
 type MainLayoutProps = {
@@ -11,7 +14,9 @@ export function MainLayout({ children }: MainLayoutProps) {
   const { increase, setIsPressed } = useScore();
   const isFired = useRef(false);
   const containerRef = useRef<HTMLDivElement>(null);
-  const pop = useRef(new Audio(popSound));
+  const pops = [pop1Sound, pop2Sound, pop3Sound, pop4Sound];
+  const popIndex = Math.floor(Math.random() * 4);
+  const pop = new Audio(pops[popIndex]);
 
   const onPressDown = () => {
     setIsPressed(true);
@@ -25,39 +30,31 @@ export function MainLayout({ children }: MainLayoutProps) {
 
   const onPop = () => {
     if (!isFired.current) {
-      pop.current.currentTime = 0;
-      pop.current.play();
+      pop.currentTime = 0;
+      pop.play();
       increase();
       onPressDown();
     }
   };
 
-  const onLayoutDown = (event: MouseEvent) => {
+  const onLayoutDown = (event: PointerEvent<HTMLDivElement>) => {
     if (event.target === containerRef.current) onPop();
   };
 
-  const onLayoutUp = (event: MouseEvent) => {
+  const onLayoutUp = (event: PointerEvent<HTMLDivElement>) => {
     if (event.target === containerRef.current) onPressUp();
   };
-
-  useEffect(() => {
-    document.addEventListener('pointerdown', onLayoutDown);
-    document.addEventListener('keydown', onPop);
-    document.addEventListener('keyup', onPressUp);
-    document.addEventListener('pointerup', onLayoutUp);
-
-    return () => {
-      document.removeEventListener('mousedown', onLayoutDown);
-      document.removeEventListener('keydown', onPop);
-      document.removeEventListener('keyup', onPressUp);
-      document.removeEventListener('mouseup', onLayoutUp);
-    };
-  }, []);
 
   return (
     <div
       ref={containerRef}
+      role="button"
       className="flex flex-col justify-between items-center h-screen"
+      tabIndex={-1}
+      onPointerDown={onLayoutDown}
+      onPointerUp={onLayoutUp}
+      onKeyDown={onPop}
+      onKeyUp={onPressUp}
     >
       {children}
     </div>
